@@ -10,20 +10,24 @@ import javax.imageio.ImageIO; // Might not need.
 
 public class Profile {
 	private String username;
+	private String email;
 	private boolean admin;
+	private int count; // Number of Users
 	private Project[] projects;
 	private File profilePic = null;
 	
 	/**
 	 * Parameterized Constructor for the Profile Class.
 	 * @param theName
+	 * @param theEmail
 	 * @param theAdmin
 	 * @param theNum
 	 * @throws IOException
 	 */
-	public Profile(String theName, boolean theAdmin, int theNum) throws IOException {
+	public Profile(String theName, String theEmail, boolean theAdmin, int theNum) throws IOException {
 		String filePath = "/files/profilePicUser" + theNum; // EXAMPLE ONLY!
 		this.username = theName;
+		this.email = theEmail;
 		this.admin = theAdmin;
 		// Insert read command using custom filepath.
 	}
