@@ -1,6 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
@@ -10,6 +16,11 @@ public class AppGUI extends JFrame {
     private JButton exportButton;
     private JButton importButton;
     private JButton aboutButton;
+    private JButton createProfileButton;
+    private JButton createButton;
+    private TextField userField = new TextField("", 0);
+    private String username;
+    private boolean isAdmin;
     private File file = new File("."); // WE'RE GOING TO NEED A PATHNAME
 
     private final JFileChooser fileChooser = new JFileChooser();
@@ -43,13 +54,68 @@ public class AppGUI extends JFrame {
          *         // panel.add(tempPanel, BorderLayout.CENTER);
          */
 
-
+        createProfileButton = new JButton("New Profile");
+        panel.add(createProfileButton, BorderLayout.CENTER);
+        
         aboutButton = new JButton("About");
         aboutButton.setFocusable(false);
 
         panel.add(aboutButton, BorderLayout.SOUTH);
         frame.add(panel, BorderLayout.CENTER);
         addAboutEvent();
+        addCreateProfileEvent();
+    }
+    
+    private void createProfilePanel() {
+    	JFrame createProfileFrame = new JFrame("Create a new Profile");
+    	createProfileFrame.setVisible(true);
+    	createProfileFrame.setSize(FRAME_SIZE);
+    	createProfileFrame.setLocationRelativeTo(null);
+    	createProfileFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel create = new JPanel(new GridLayout(0,2));
+        JLabel usernameLabel = new JLabel("UserName: ");
+        JLabel isAdmin = new JLabel("Make Admin: ");
+        createButton = new JButton("Create");
+        
+        create.add(usernameLabel);
+        create.add(userField);
+        create.add(isAdmin);
+        create.add(adminButtonPanel());
+//        create.add(username);
+//        create.add(userField);
+        
+        create.add(createButton);
+        createButton.addActionListener(e -> {
+    		username = userField.getText();
+    		createProfileFrame.dispose();
+    	});
+        createProfileFrame.add(create);
+    }
+    
+    public JPanel adminButtonPanel() {
+    	JPanel buttonPanel = new JPanel();
+    	buttonPanel.setLayout(new FlowLayout());
+    	JToggleButton yes = new JToggleButton("Yes");
+		JToggleButton no = new JToggleButton("No");
+		yes.setSize(20, 20);
+		no.setSize(20, 20);
+		
+		yes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				isAdmin = Profile.setAdmin(true);
+				
+			}
+		});
+
+		no.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				isAdmin = Profile.setAdmin(false);
+			}
+		});
+		buttonPanel.add(yes);
+		buttonPanel.add(no);
+		return buttonPanel;
     }
 
     private void aboutPanel() {
@@ -65,7 +131,7 @@ public class AppGUI extends JFrame {
         JPanel teamPanel = new JPanel();
         JPanel versionPanel = new JPanel();
 
-        userPanel.add(new JLabel("This app is registered to: " + VersionInfo.getUser(), JLabel.CENTER));
+        userPanel.add(new JLabel("This app is registered to: " + VersionInfo.getUserName(), JLabel.CENTER));
         userPanel.add(new JLabel(" |  This app is provided by:", JLabel.CENTER));
 
         teamPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -110,7 +176,13 @@ public class AppGUI extends JFrame {
             aboutPanel();
         });
     }
-
+    private void addCreateProfileEvent() {
+    	createProfileButton.addActionListener(e -> {
+            System.out.println("Create new profile button clicked.");
+            createProfilePanel();
+        });
+    }
+   
     private void addImportEvent() {
         importButton.addActionListener(e -> {
             System.out.println("Import button clicked.");
@@ -156,7 +228,7 @@ public class AppGUI extends JFrame {
     		String theEmail = theFile.next();
     		boolean theAdmin = theFile.nextBoolean();
     		
-    		theProfiles[index] = new Profile(theName, theEmail, theAdmin, index);
+    		theProfiles[index] = new Profile(theName + " " + theEmail, theAdmin, index);
     		index++;
     	}
     	
