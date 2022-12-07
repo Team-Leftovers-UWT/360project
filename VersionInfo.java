@@ -33,4 +33,14 @@ public class VersionInfo {
 	public static String getUser() {
 		return userName;
 	}
+	
+	public static String[] getDevs() {
+		String[] output = new String[5];
+		output[0] = D1;
+		output[1] = D2;
+		output[2] = D3;
+		output[3] = D4;
+		output[4] = D5;
+		return output;
+	}
 }
