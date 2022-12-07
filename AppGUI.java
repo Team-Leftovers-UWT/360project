@@ -1,6 +1,12 @@
+package Iteration2;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
@@ -10,8 +16,11 @@ public class AppGUI extends JFrame {
     private JButton exportButton;
     private JButton importButton;
     private JButton aboutButton;
-    private File file = new File("."); // WE'RE GOING TO NEED A PATHNAME
-
+    private JButton profileButton;
+    private JButton addProfile;
+    private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
+    private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
+    private int userCount = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").list().length;
     private final JFileChooser fileChooser = new JFileChooser();
 
     public AppGUI() {
@@ -24,7 +33,6 @@ public class AppGUI extends JFrame {
         frame.setSize(FRAME_SIZE);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         profilePanel();
 
     }
@@ -34,7 +42,6 @@ public class AppGUI extends JFrame {
         panel.setSize(FRAME_SIZE);
 
         JPanel tempPanel = new JPanel();
-        Path userDir = Paths.get(filePath + "\\Users");
 
         /**
          * // For each profile, create a profile button. -----> IMPORT PROFILES. MAYBE USE FOR LOOP FOR THIS SECTION
@@ -60,7 +67,7 @@ public class AppGUI extends JFrame {
         tempPanel.add(addProfile, BorderLayout.NORTH);
         panel.add(tempPanel, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.CENTER);
-        profileEvent();
+        //profileEvent();
         addProfileEvent();
         addAboutEvent();
     }
@@ -103,16 +110,31 @@ public class AppGUI extends JFrame {
 
     private void mainPanel() {
         panel = new JPanel();
+        panel.setSize(FRAME_SIZE);
+        panel.setVisible(true);
+        panel.setLayout(null);
+        frame.setContentPane(panel);
+
+        Path userPath = Paths.get(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users");
+        Path testPath = userPath.getName(0);
+        System.out.println(testPath);
+
+        try {
+            Scanner profileDetails = new Scanner(new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         importButton = new JButton("Import");
+        importButton.setBounds(350, 250,  75, 30);
         importButton.setFocusable(false);
         exportButton = new JButton("Export");
+        exportButton.setBounds(450, 250,  75, 30);
         exportButton.setFocusable(false);
 
         panel.add(importButton);
         panel.add(exportButton);
 
-        frame.add(panel, BorderLayout.CENTER);
         addImportEvent();
         addExportEvent();
     }
@@ -131,7 +153,7 @@ public class AppGUI extends JFrame {
             int userDestination = fileChooser.showOpenDialog(frame);
             if(userDestination == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
-                System.out.println("Selected file: "+file.getAbsolutePath());
+                System.out.println("Selected file: " + file.getAbsolutePath());
             }
         });
     }
@@ -143,11 +165,10 @@ public class AppGUI extends JFrame {
             int userSelection = fileChooser.showSaveDialog(frame);
             if(userSelection == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
-                System.out.println("File Exported to: "+file.getAbsolutePath());
+                System.out.println("File Exported to: " + file.getAbsolutePath());
             }
         });
     }
-    
 
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
@@ -208,43 +229,25 @@ public class AppGUI extends JFrame {
             frame.dispose();
             start();
         });
-
-    /**
-     * makeProfile method creates a .txt file containing the Username
-     *            email and admin status of the account created.
-     * @param theName is the user's username.
-     * @param theEmail is the user's email
-     * @param isAdmin is the admin status of the account
-     * @param Count is the number of accounts listed in the program.
-     */
-    public static Profile[] readProfiles(int count) throws IOException {
-    	
-    	Profile[] theProfiles = new Profile[count];
-    	String filePath = "./files/profiles.txt";
-    	final Scanner theFile = new Scanner(new File(filePath));
-		//final FileWriter outFile = new FileWriter(filePath); Save for writeProfiles
-    	
-    	int index = 0;
-    	while(theFile.hasNext()) {
-    		String theName = theFile.next();
-    		String theEmail = theFile.next();
-    		boolean theAdmin = theFile.nextBoolean();
-    		
-    		theProfiles[index] = new Profile(theName, theEmail, theAdmin, index);
-    		index++;
-    	}
-    	
-    	return theProfiles;
-
     }
 
+    private void profileEvent() {
+        profileButton.addActionListener(e -> {
+            //mainPanel();
+        });
+    }
+
+    /**
+     * Main driver class which starts the program.
+     * It also creates the directory that the program will use to store data.
+     * @param theArgs
+     */
     public static void main(String[] theArgs) {
         try {
             Files.createDirectories(Paths.get(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
         AppGUI theGUI = new AppGUI(); // Automatically starts.
     }
 
