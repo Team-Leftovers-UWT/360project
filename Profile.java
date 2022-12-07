@@ -47,6 +47,10 @@ public class Profile {
 		return this.admin;
 	}
 	
+	public static boolean setAdmin(boolean result) {
+		return result;
+	}
+	
 	/**
 	 * Returns Profile Username.
 	 * @return
