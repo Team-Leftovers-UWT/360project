@@ -21,6 +21,7 @@ public class AppGUI extends JFrame {
     private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
     private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
     private int userCount = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").list().length;
+    private File[] tryNames = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").listFiles();
     private final JFileChooser fileChooser = new JFileChooser();
 
     public AppGUI() {
@@ -43,17 +44,8 @@ public class AppGUI extends JFrame {
 
         JPanel tempPanel = new JPanel();
 
-        /**
-         * // For each profile, create a profile button. -----> IMPORT PROFILES. MAYBE USE FOR LOOP FOR THIS SECTION
-         *         profileButtonOrSomething.addActionListener(e -> {
-         *             System.out.println("Profile button clicked.");
-         *             mainPanel();
-         *         });
-         *         // tempPanel.add(profileButton); // FOR EACH PROFILE, ADD THE BUTTON TO TEMP FRAME
-         *         // panel.add(tempPanel, BorderLayout.CENTER);
-         */
         for (int i = 1; i < userCount + 1; i++) {
-            profileButton = new JButton("User " + i);
+            profileButton = new JButton(tryNames[i].getName());
             tempPanel.add(profileButton);
         }
 
@@ -227,6 +219,10 @@ public class AppGUI extends JFrame {
             Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
             createFrame.dispose();
             frame.dispose();
+            
+            // Updates userCount
+            userCount++;
+            
             start();
         });
     }
