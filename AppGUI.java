@@ -148,6 +148,7 @@ public class AppGUI extends JFrame {
         });
     }
     
+
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
             System.out.println("Create Profile button clicked.");
@@ -207,6 +208,34 @@ public class AppGUI extends JFrame {
             frame.dispose();
             start();
         });
+
+    /**
+     * makeProfile method creates a .txt file containing the Username
+     *            email and admin status of the account created.
+     * @param theName is the user's username.
+     * @param theEmail is the user's email
+     * @param isAdmin is the admin status of the account
+     * @param Count is the number of accounts listed in the program.
+     */
+    public static Profile[] readProfiles(int count) throws IOException {
+    	
+    	Profile[] theProfiles = new Profile[count];
+    	String filePath = "./files/profiles.txt";
+    	final Scanner theFile = new Scanner(new File(filePath));
+		//final FileWriter outFile = new FileWriter(filePath); Save for writeProfiles
+    	
+    	int index = 0;
+    	while(theFile.hasNext()) {
+    		String theName = theFile.next();
+    		String theEmail = theFile.next();
+    		boolean theAdmin = theFile.nextBoolean();
+    		
+    		theProfiles[index] = new Profile(theName, theEmail, theAdmin, index);
+    		index++;
+    	}
+    	
+    	return theProfiles;
+
     }
 
     public static void main(String[] theArgs) {

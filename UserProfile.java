@@ -1,24 +1,28 @@
+//mgashay
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class UserProfile implements Serializable {
 
-    private String tagName;
+    private String name;
 
     private String email;
 
-    public UserProfile(String tagName, String email){
-        this.tagName = tagName;
+    private boolean isAdmin;
+
+    public UserProfile(String name, String email, boolean isAdmin){
+        this.name = name;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getName() {
+        return name;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -28,10 +32,17 @@ public class UserProfile implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     @Override
     public String toString() {
-        return  tagName + " " + email;
+        return  name + " " + email;
     }
 
     public void Export(){
@@ -52,9 +63,5 @@ public class UserProfile implements Serializable {
                 }
             }
         }
-    }
-    public static void main(String [] args){
-        UserProfile user = new UserProfile("Author", "Author@gmail.com");
-        user.Export();
     }
 }
