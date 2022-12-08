@@ -1,12 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
-
-
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
@@ -16,13 +14,12 @@ public class AppGUI extends JFrame {
     private JButton exportButton;
     private JButton importButton;
     private JButton aboutButton;
-    private JButton createProfileButton;
-    private JButton createButton;
-    private TextField userField = new TextField("", 0);
-    private String username;
-    private boolean isAdmin;
-    private File file = new File("."); // WE'RE GOING TO NEED A PATHNAME
-
+    private JButton profileButton;
+    private JButton addProfile;
+    private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
+    private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
+    private int userCount = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").list().length;
+    private File[] tryNames = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").listFiles();
     private final JFileChooser fileChooser = new JFileChooser();
 
     public AppGUI() {
@@ -35,87 +32,34 @@ public class AppGUI extends JFrame {
         frame.setSize(FRAME_SIZE);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         profilePanel();
 
     }
 
     private void profilePanel() {
         panel = new JPanel();
+        panel.setSize(FRAME_SIZE);
+
         JPanel tempPanel = new JPanel();
+        System.out.println(" how many users are in the folder: " + userCount);
+        for (int i = 0; i < userCount; i++) {
+            profileButton = new JButton(tryNames[i].getName());
+            tempPanel.add(profileButton);
+        }
 
-        /**
-         * // For each profile, create a profile button. -----> IMPORT PROFILES. MAYBE USE FOR LOOP FOR THIS SECTION
-         *         profileButtonOrSomething.addActionListener(e -> {
-         *             System.out.println("Profile button clicked.");
-         *             mainPanel();
-         *         });
-         *         // tempPanel.add(profileButton); // FOR EACH PROFILE, ADD THE BUTTON TO TEMP FRAME
-         *         // panel.add(tempPanel, BorderLayout.CENTER);
-         */
+        addProfile = new JButton("Create Profile");
+        addProfile.setFocusable(false);
 
-        createProfileButton = new JButton("New Profile");
-        panel.add(createProfileButton, BorderLayout.CENTER);
-        
         aboutButton = new JButton("About");
         aboutButton.setFocusable(false);
 
         panel.add(aboutButton, BorderLayout.SOUTH);
+        tempPanel.add(addProfile, BorderLayout.NORTH);
+        panel.add(tempPanel, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.CENTER);
+        //profileEvent();
+        addProfileEvent();
         addAboutEvent();
-        addCreateProfileEvent();
-    }
-    
-    private void createProfilePanel() {
-    	JFrame createProfileFrame = new JFrame("Create a new Profile");
-    	createProfileFrame.setVisible(true);
-    	createProfileFrame.setSize(FRAME_SIZE);
-    	createProfileFrame.setLocationRelativeTo(null);
-    	createProfileFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JPanel create = new JPanel(new GridLayout(0,2));
-        JLabel usernameLabel = new JLabel("UserName: ");
-        JLabel isAdmin = new JLabel("Make Admin: ");
-        createButton = new JButton("Create");
-        
-        create.add(usernameLabel);
-        create.add(userField);
-        create.add(isAdmin);
-        create.add(adminButtonPanel());
-//        create.add(username);
-//        create.add(userField);
-        
-        create.add(createButton);
-        createButton.addActionListener(e -> {
-    		username = userField.getText();
-    		createProfileFrame.dispose();
-    	});
-        createProfileFrame.add(create);
-    }
-    
-    public JPanel adminButtonPanel() {
-    	JPanel buttonPanel = new JPanel();
-    	buttonPanel.setLayout(new FlowLayout());
-    	JToggleButton yes = new JToggleButton("Yes");
-		JToggleButton no = new JToggleButton("No");
-		yes.setSize(20, 20);
-		no.setSize(20, 20);
-		
-		yes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				isAdmin = Profile.setAdmin(true);
-				
-			}
-		});
-
-		no.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				isAdmin = Profile.setAdmin(false);
-			}
-		});
-		buttonPanel.add(yes);
-		buttonPanel.add(no);
-		return buttonPanel;
     }
 
     private void aboutPanel() {
@@ -156,16 +100,31 @@ public class AppGUI extends JFrame {
 
     private void mainPanel() {
         panel = new JPanel();
+        panel.setSize(FRAME_SIZE);
+        panel.setVisible(true);
+        panel.setLayout(null);
+        frame.setContentPane(panel);
+
+        Path userPath = Paths.get(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users");
+        Path testPath = userPath.getName(0);
+        System.out.println(testPath);
+
+        try {
+            Scanner profileDetails = new Scanner(new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         importButton = new JButton("Import");
+        importButton.setBounds(350, 250,  75, 30);
         importButton.setFocusable(false);
         exportButton = new JButton("Export");
+        exportButton.setBounds(450, 250,  75, 30);
         exportButton.setFocusable(false);
 
         panel.add(importButton);
         panel.add(exportButton);
 
-        frame.add(panel, BorderLayout.CENTER);
         addImportEvent();
         addExportEvent();
     }
@@ -176,13 +135,7 @@ public class AppGUI extends JFrame {
             aboutPanel();
         });
     }
-    private void addCreateProfileEvent() {
-    	createProfileButton.addActionListener(e -> {
-            System.out.println("Create new profile button clicked.");
-            createProfilePanel();
-        });
-    }
-   
+
     private void addImportEvent() {
         importButton.addActionListener(e -> {
             System.out.println("Import button clicked.");
@@ -190,7 +143,7 @@ public class AppGUI extends JFrame {
             int userDestination = fileChooser.showOpenDialog(frame);
             if(userDestination == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
-                System.out.println("Selected file: "+file.getAbsolutePath());
+                System.out.println("Selected file: " + file.getAbsolutePath());
             }
         });
     }
@@ -202,41 +155,96 @@ public class AppGUI extends JFrame {
             int userSelection = fileChooser.showSaveDialog(frame);
             if(userSelection == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
-                System.out.println("File Exported to: "+file.getAbsolutePath());
+                System.out.println("File Exported to: " + file.getAbsolutePath());
             }
         });
     }
-    
-    /**
-     * makeProfile method creates a .txt file containing the Username
-     *            email and admin status of the account created.
-     * @param theName is the user's username.
-     * @param theEmail is the user's email
-     * @param isAdmin is the admin status of the account
-     * @param Count is the number of accounts listed in the program.
-     */
-    public static Profile[] readProfiles(int count) throws IOException {
-    	
-    	Profile[] theProfiles = new Profile[count];
-    	String filePath = "./files/profiles.txt";
-    	final Scanner theFile = new Scanner(new File(filePath));
-		//final FileWriter outFile = new FileWriter(filePath); Save for writeProfiles
-    	
-    	int index = 0;
-    	while(theFile.hasNext()) {
-    		String theName = theFile.next();
-    		String theEmail = theFile.next();
-    		boolean theAdmin = theFile.nextBoolean();
-    		
-    		theProfiles[index] = new Profile(theName + " " + theEmail, theAdmin, index);
-    		index++;
-    	}
-    	
-    	return theProfiles;
+
+    private void addProfileEvent() {
+        addProfile.addActionListener(event -> {
+            System.out.println("Create Profile button clicked.");
+            createProfilePanel();
+        });
     }
 
+    /**
+     * createProfilePanel opens up a prompt asking the user for a
+     *                      username, email and determine its admin status
+     */
+    private void createProfilePanel() {
+        JFrame createFrame = new JFrame("Create a Profile"); // Creates a New Window for About Info.
+        createFrame.setVisible(true);
+        createFrame.setLayout(null);
+        createFrame.setSize(300,180);
+        createFrame.setLocationRelativeTo(null);
+
+        JTextField setUsername = new JTextField();
+        setUsername.setBounds(100,10,165,25);
+
+        JLabel user = new JLabel("Username");
+        user.setBounds(10,10, 80,25);
+
+        JTextField setEmail = new JTextField();
+        setEmail.setBounds(100,50,165,25);
+
+        JLabel userEmail = new JLabel("Email");
+        userEmail.setBounds(10, 50, 80, 25);
+
+        JCheckBox isAdmin = new JCheckBox();
+        isAdmin.setText("Admin Account");
+        isAdmin.setBounds(80, 80, 150, 25);
+        isAdmin.setFocusable(false);
+
+        JButton submit = new JButton("Submit");
+        submit.setBounds(80,110,150,25);
+
+        createFrame.add(user);
+        createFrame.add(setUsername);
+        createFrame.add(userEmail);
+        createFrame.add(setEmail);
+        createFrame.add(isAdmin);
+        createFrame.add(submit);
+
+        submit.addActionListener(event -> {
+            userCount++;
+            System.out.println("how many users are in the folder after clicking submit: " + userCount);
+            String username = setUsername.getText();
+            String email = setEmail.getText();
+            boolean adminStatus = false;
+            if (isAdmin.isSelected()) {
+                adminStatus = true;
+            }
+            Profile User = new Profile(username, email, adminStatus, userCount);
+            Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
+            createFrame.dispose();
+            frame.dispose();
+            
+            // Updates userCount
+            //userCount++;
+            
+            start();
+        });
+    }
+
+    private void profileEvent() {
+        profileButton.addActionListener(e -> {
+            //mainPanel();
+        });
+    }
+
+    /**
+     * Main driver class which starts the program.
+     * It also creates the directory that the program will use to store data.
+     * @param theArgs
+     */
     public static void main(String[] theArgs) {
+        try {
+            Files.createDirectories(Paths.get(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AppGUI theGUI = new AppGUI(); // Automatically starts.
+        
     }
 
 }
