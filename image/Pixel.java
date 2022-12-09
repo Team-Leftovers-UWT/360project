@@ -103,6 +103,11 @@ public class Pixel {
     /**
      * Sets the green value for this pixel to the specified value.
      *
+     /*
+      *
+      * @Author Masse G.
+      */
+     
      * @param theGreen The new value.
      * @exception IllegalArgumentException if the specified value is less than
      *                MIN_COLOR_VALUE or greater than MAX_COLOR_VALUE.
