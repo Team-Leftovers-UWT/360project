@@ -7,12 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import image.PixelImage;
+
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
     private JPanel panel;
     private JFrame frame;
-
+    private PixelImage theImage;
+    private JLabel imageLable;
     private JButton exportButton;
     private JButton importButton;
     private JButton aboutButton;
@@ -35,6 +38,10 @@ public class AppGUI extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         profilePanel();
+        imageLable = new JLabel();
+        imageLable.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLable.setVerticalAlignment(SwingConstants.CENTER);
+        frame.add(imageLable);
 
     }
 
@@ -145,6 +152,13 @@ public class AppGUI extends JFrame {
             int userDestination = fileChooser.showOpenDialog(frame);
             if(userDestination == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
+                 try {
+                        theImage = PixelImage.load(fileChooser.getSelectedFile());
+                        imageLable.setIcon(new ImageIcon(theImage));
+                        frame.pack();
+                    }catch (IOException E){
+                        JOptionPane.showMessageDialog(frame,"the file selected doesnt contain image");
+                    }
                 System.out.println("Selected file: " + file.getAbsolutePath());
             }
         });
@@ -158,6 +172,11 @@ public class AppGUI extends JFrame {
             if(userSelection == JFileChooser.APPROVE_OPTION){
                 file = fileChooser.getSelectedFile();
                 System.out.println("File Exported to: " + file.getAbsolutePath());
+                    try{
+                        theImage.save(file);
+                    }catch (final IOException E){
+                        JOptionPane.showMessageDialog(frame,"No image selected");
+                    }
             }
         });
     }
