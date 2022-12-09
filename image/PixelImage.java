@@ -1,4 +1,7 @@
-
+/*
+ *
+ * @Author Masse G.
+ */
 package image;
 
 import java.awt.Graphics;
