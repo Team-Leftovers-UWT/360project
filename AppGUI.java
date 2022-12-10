@@ -7,15 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import image.PixelImage;
 
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
     private JPanel panel;
     private JFrame frame;
-    private PixelImage theImage;
-    private JLabel imageLable;
     private JButton exportButton;
     private JButton importButton;
     private JButton aboutButton;
@@ -38,10 +35,7 @@ public class AppGUI extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         profilePanel();
-        imageLable = new JLabel();
-        imageLable.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLable.setVerticalAlignment(SwingConstants.CENTER);
-        frame.add(imageLable);
+       
 
     }
 
