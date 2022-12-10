@@ -42,16 +42,21 @@ public class AppGUI extends JFrame {
 
         JPanel tempPanel = new JPanel();
         System.out.println(" how many users are in the folder: " + userCount);
-        for (int i = 0; i < userCount; i++) {
-            profileButton = new JButton(tryNames[i].getName());
-            tempPanel.add(profileButton);
-        }
+//        for (int i = 0; i < 4; i++) {
+//            profileButton = new JButton(tryNames[i].getName());
+//            tempPanel.add(profileButton);
+//        }
 
         addProfile = new JButton("Create Profile");
         addProfile.setFocusable(false);
 
         aboutButton = new JButton("About");
         aboutButton.setFocusable(false);
+        
+        for (int i = 0; i < 4; i++) {
+            profileButton = new JButton(tryNames[i].getName());
+            tempPanel.add(profileButton);
+        }
 
         panel.add(aboutButton, BorderLayout.SOUTH);
         tempPanel.add(addProfile, BorderLayout.NORTH);
@@ -75,7 +80,7 @@ public class AppGUI extends JFrame {
         JPanel teamPanel = new JPanel();
         JPanel versionPanel = new JPanel();
 
-        userPanel.add(new JLabel("This app is registered to: " + VersionInfo.getUserName(), JLabel.CENTER));
+        userPanel.add(new JLabel("This app is registered to: " + VersionInfo.getUser(), JLabel.CENTER));
         userPanel.add(new JLabel(" |  This app is provided by:", JLabel.CENTER));
 
         teamPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -205,25 +210,39 @@ public class AppGUI extends JFrame {
         createFrame.add(isAdmin);
         createFrame.add(submit);
 
-        submit.addActionListener(event -> {
-            userCount++;
-            System.out.println("how many users are in the folder after clicking submit: " + userCount);
-            String username = setUsername.getText();
-            String email = setEmail.getText();
-            boolean adminStatus = false;
-            if (isAdmin.isSelected()) {
-                adminStatus = true;
-            }
-            Profile User = new Profile(username, email, adminStatus, userCount);
-            Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
-            createFrame.dispose();
-            frame.dispose();
-            
-            // Updates userCount
-            //userCount++;
-            
-            start();
-        });
+        if(userCount <= 4) {
+	        submit.addActionListener(event -> {
+	            userCount++;
+	            //System.out.println("how many users are in the folder after clicking submit: " + userCount);
+	            String username = setUsername.getText();
+	            String email = setEmail.getText();
+	            boolean adminStatus = false;
+	            if (isAdmin.isSelected()) {
+	                adminStatus = true;
+	            }
+	            Profile User = new Profile(username, email, adminStatus, userCount);
+	            Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
+	            createFrame.dispose();
+	            frame.dispose();
+	            
+	            // Updates userCount
+	            //userCount++;
+	            
+	            start();
+	        });
+        }
+        else {
+        	submit.addActionListener(event -> {
+        		JFrame errorFrame = new JFrame("ERROR");
+        		errorFrame.setVisible(true);
+        		errorFrame.setLayout(null);
+        		errorFrame.setSize(400,100);
+        		errorFrame.setLocationRelativeTo(null);
+        		
+        		errorFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        		start();
+        	});
+        }
     }
 
     private void profileEvent() {
