@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 
 public class AppGUI extends JFrame {
@@ -23,8 +22,7 @@ public class AppGUI extends JFrame {
     private JButton importButton;
     private JButton deleteButton;
     private JList<File> fileList;
-    private ArrayList<File> arrayFiles;
-    private JPanel utilityPanel;
+    private DefaultListModel<File> listModel;
     
     private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
     private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
@@ -157,58 +155,50 @@ public class AppGUI extends JFrame {
      */  
     private void utilities(){
         frame = new JFrame("Utilities");
-        utilityPanel = new JPanel();
-        utilityPanel.setLayout(new BorderLayout());
-        frame.add(utilityPanel);
+        
+        listModel = new DefaultListModel<>();
         fileList = new JList<>();
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        utilityPanel.add( new JScrollPane(fileList), BorderLayout.CENTER);
+        
         importButton = new JButton("Import");
         exportButton = new JButton("Export");
         deleteButton = new JButton("Delete");
         
         importButton.addActionListener(e -> {
             System.out.println("Import button clicked.");
-            fileChooser.setMultiSelectionEnabled(true);
-            int returnValue = fileChooser.showOpenDialog(null);
+            fileChooser.setMultiSelectionEnabled(JFileChooser.FILES_ONLY);
+            int returnValue = fileChooser.showOpenDialog(frame);//if frame doesnt work/ switch to null or this.
             if(returnValue == fileChooser.APPROVE_OPTION){
-               File[] selectedFiles = fileChooser.getSelectedFiles();
-                for(File f : selectedFiles){
-                    arrayFiles.add(f);
-                }
-                updateFileList();
+               File selectedFiles = fileChooser.getSelectedFiles();
+                listModel.addElement(returnValue);   
             }                               
        });
         exportButton.addActionListener(e -> {
             int selectedIndex = fileList.getSelectedIndex();
             if(selectedIndex != -1){
-                File SelectFile = arrayFiles.get(selectedIndex);
-                updateFileList();
+                File SelectFile = listModel.get(selectedIndex);
+                int result = fileChooser.showSaveDialog(frame);//if frame doesnt work/ switch to null or this.
+                if(result == fileChooser.APPROVE_OPTION){
+                    File saveFile = fileChooser.getSelectedFile();
+                }
             }
         });
       deleteButton.addActionListener(e -> {
           int seleIndex = fileList.getSelectedIndex();
           if(seleIndex != -1){
-            arrayFiles.remove(seleIndex);
-              updateFileList();
+            listModel.remove(seleIndex);
           }
       });
-    JPanel buttonPanel = new JPanel();
-        buttonPanel.add(importButton);
-        buttonPanel.add(exportButton);
-        buttonPanel.add(deleteButton);
-        utilityPanel.add(buttonPanel, BorderLayout.SOUTH);
-    }
-    
-    /*
-     * helper Method to update files for utilities.
-     */  
-     private void updateFileList() {
-         File[] fileArray = new File[arrayFiles.size()];
-         fileArray = arrayFiles.toArray(fileArray);
-    }
-    
+      frame.setLayout(new BorderLayout());
+      JPanel buttonPanel = new JPanel();
+         buttonPanel.add(importButton);
+         buttonPanel.add(exportButton);
+         buttonPanel.add(deleteButton);
+         frame.add(buttonPanel, BorderLayout.SOUTH);
+         frame.add( new JScrollPane(fileList), BorderLayout.CENTER);
 
+    }
+    
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
             System.out.println("Create Profile button clicked.");
