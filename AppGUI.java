@@ -7,17 +7,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
     private JPanel panel;
     private JFrame frame;
-    private JButton exportButton;
-    private JButton importButton;
+
     private JButton aboutButton;
     private JButton profileButton;
     private JButton addProfile;
+    
+    private JButton exportButton;
+    private JButton importButton;
+    private JButton deleteButton;
+    private JList<File> fileList;
+    private ArrayList<File> arrayFiles;
+    private JPanel utilityPanel;
+    
     private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
     private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
     private int userCount = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").list().length;
@@ -100,7 +108,8 @@ public class AppGUI extends JFrame {
         aboutFrame.add(panel, BorderLayout.CENTER);
 
     }
-
+    // add utilities method to shorten this method?
+    // change needed
     private void mainPanel() {
         panel = new JPanel();
         panel.setSize(FRAME_SIZE);
@@ -138,42 +147,67 @@ public class AppGUI extends JFrame {
             aboutPanel();
         });
     }
-
-    private void addImportEvent() {
+    
+    /* 
+     * creates new panel within the frame 
+     * provides the option for user to import/export/delete files
+     *
+     *
+     * not added to the main frame, need a button to let the user enter this options
+     */  
+    private void utilities(){
+        frame = new JFrame("Utilities");
+        utilityPanel = new JPanel();
+        utilityPanel.setLayout(new BorderLayout());
+        frame.add(utilityPanel);
+        fileList = new JList<>();
+        fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        utilityPanel.add( new JScrollPane(fileList), BorderLayout.CENTER);
+        importButton = new JButton("Import");
+        exportButton = new JButton("Export");
+        deleteButton = new JButton("Delete");
+        
         importButton.addActionListener(e -> {
             System.out.println("Import button clicked.");
-            fileChooser.setDialogTitle("File to Import");
-            int userDestination = fileChooser.showOpenDialog(frame);
-            if(userDestination == JFileChooser.APPROVE_OPTION){
-                file = fileChooser.getSelectedFile();
-                 try {
-                        theImage = PixelImage.load(fileChooser.getSelectedFile());
-                        imageLable.setIcon(new ImageIcon(theImage));
-                        frame.pack();
-                    }catch (IOException E){
-                        JOptionPane.showMessageDialog(frame,"the file selected doesnt contain image");
-                    }
-                System.out.println("Selected file: " + file.getAbsolutePath());
-            }
-        });
-    }
-
-    private void addExportEvent() {
+            fileChooser.setMultiSelectionEnabled(true);
+            int returnValue = fileChooser.showOpenDialog(null);
+            if(returnValue == fileChooser.APPROVE_OPTION){
+               File[] selectedFiles = fileChooser.getSelectedFiles();
+                for(File f : selectedFiles){
+                    arrayFiles.add(f);
+                }
+                updateFileList();
+            }                               
+       });
         exportButton.addActionListener(e -> {
-            System.out.println("Export button clicked.");
-            fileChooser.setDialogTitle("File to Export");
-            int userSelection = fileChooser.showSaveDialog(frame);
-            if(userSelection == JFileChooser.APPROVE_OPTION){
-                file = fileChooser.getSelectedFile();
-                System.out.println("File Exported to: " + file.getAbsolutePath());
-                    try{
-                        theImage.save(file);
-                    }catch (final IOException E){
-                        JOptionPane.showMessageDialog(frame,"No image selected");
-                    }
+            int selectedIndex = fileList.getSelectedIndex();
+            if(selectedIndex != -1){
+                File SelectFile = arrayFiles.get(selectedIndex);
+                updateFileList();
             }
         });
+      deleteButton.addActionListener(e -> {
+          int seleIndex = fileList.getSelectedIndex();
+          if(seleIndex != -1){
+            arrayFiles.remove(seleIndex);
+              updateFileList();
+          }
+      });
+    JPanel buttonPanel = new JPanel();
+        buttonPanel.add(importButton);
+        buttonPanel.add(exportButton);
+        buttonPanel.add(deleteButton);
+        utilityPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
+    
+    /*
+     * helper Method to update files for utilities.
+     */  
+     private void updateFileList() {
+         File[] fileArray = new File[arrayFiles.size()];
+         fileArray = arrayFiles.toArray(fileArray);
+    }
+    
 
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
