@@ -16,6 +16,9 @@ public class Iteration2 extends JFrame{
     private JButton importButton;
     private JButton exportButton;
     private JButton deleteButton;
+    private JFileChooser fileChooser;
+    private JFrame frame;
+
 
 
     public Iteration2() {
