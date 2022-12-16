@@ -1,3 +1,10 @@
+/**
+ * This is main GUI class that actually runs the entire program
+ * makes calls to all the other classes in the folder consisting of
+ * Profile, VersionInfo, Iteration2, and FoldersGUI
+ * 
+ * @author Kurtis Copeland, Deep Singh, Messe Gashay, Kian Rivera
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -23,6 +30,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Start Method for the AppGUI
+     * @author Kurtis 
      */
     private void start() {
         frame = new JFrame("Leftovers App");
@@ -36,6 +44,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Displays the About Button, Profiles from Documents Folder, and Create Profile Button.
+     * @author Kian, Kurtis, Deep
      */
     private void profilePanel() {
         panel = new JPanel();
@@ -67,6 +76,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Displays the "About Us" Panel. Includes Developer Names, Version Number, and GitHub URL.
+     * @author Deep, Kurtis
      */
     private void aboutPanel() {
         JFrame aboutFrame = new JFrame("About the Leftovers App"); // Creates a New Window for About Info.
@@ -106,6 +116,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Button ActionListener for the About Page
+     * @author Kurtis
      */
     private void addAboutEvent() {
         aboutButton.addActionListener(e -> {
@@ -116,6 +127,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Button ActionListener for the Create Profile Page
+     * @author Kurtis
      */
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
@@ -128,6 +140,7 @@ public class AppGUI extends JFrame {
      * createProfilePanel opens up a prompt asking the user for a
      * username, email and determine its admin status. If there are already 4 users,
      * prevent the user from creating more.
+     * @author Kian, Deep, Kurtis
      */
     private void createProfilePanel() {
         JFrame createFrame = new JFrame("Create a Profile"); // Creates a New Window for About Info.
@@ -206,6 +219,7 @@ public class AppGUI extends JFrame {
 
     /**
      * Button ActionListener to open the Project Categories (FoldersGUI).
+     * @author Deep
      */
     private void profileEvent() {
         profileButton.addActionListener(e -> {
@@ -214,6 +228,10 @@ public class AppGUI extends JFrame {
         });
     }
 
+    /**
+     * Pulls names of users from folder files into local string array
+     * @author Kurtis
+     */
     private String[] pullNames() {
 
         String[] output = new String[tryNames.length];
