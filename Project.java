@@ -1,3 +1,6 @@
+/**
+ * @author Kurtis
+ */
 import java.io.File;
 
 public class Project {
