@@ -11,14 +11,12 @@ import java.io.*;
 public class Iteration2 extends JFrame{
 
 
-    private JList<File> fileList;
-    private DefaultListModel<File> listModel;
-    private JButton importButton;
-    private JButton exportButton;
-    private JButton deleteButton;
-    private JFileChooser fileChooser;
-    private JFrame frame;
-
+    private final JList<File> fileList;
+    private final DefaultListModel<File> listModel;
+    private final JButton importButton;
+    private final JButton exportButton;
+    private final JButton deleteButton;
+    private final JButton backButton;
 
 
     public Iteration2() {
@@ -39,10 +37,13 @@ public class Iteration2 extends JFrame{
         deleteButton.addActionListener(new DeleteActionListener());
         exportButton = new JButton("Export");
         exportButton.addActionListener(new exportActionListener());
+        backButton = new JButton("Back");
+        backButton.addActionListener(new backActionListener());
 
         // Set up layout
         setLayout(new BorderLayout());
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(backButton);
         buttonPanel.add(importButton);
         buttonPanel.add(exportButton);
         buttonPanel.add(deleteButton);
@@ -51,6 +52,14 @@ public class Iteration2 extends JFrame{
 
        
         setVisible(true);
+    }
+
+    private class backActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            dispose();
+            FoldersGUI.start();
+
+        }
     }
 
     // Action listener for uploading a file
