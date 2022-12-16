@@ -18,6 +18,7 @@ public class Profile {
      * @param theAdmin
      * @param theNum
      * @throws IOException
+     * @author Kurtis
      */
     public Profile(String theName, String theEmail,  boolean theAdmin, int theNum) {
         this.username = theName;
@@ -36,6 +37,7 @@ public class Profile {
     /**
      * Returns Profile Administrative Status.
      * @return
+     * @author Kurtis
      */
     public boolean isAdmin() {
         return admin;
@@ -44,6 +46,7 @@ public class Profile {
     /**
      * Returns Profile Username.
      * @return
+     * @author Kurtis
      */
     public String getUserName() {
         return username;
@@ -52,6 +55,7 @@ public class Profile {
     /**
      * Returns Project list to Higher-Level Program.
      * @return
+     * @author Kurtis
      */
     public Project[] getProjects() {
         return projects;
@@ -60,6 +64,7 @@ public class Profile {
     /**
      * Possible Return for Profile Pic to GUI / Display.
      * @return
+     * @author Kurtis
      */
     public File getProfilePic() {
         return profilePic;
@@ -79,6 +84,7 @@ public class Profile {
      * @param theEmail is the user's email
      * @param isAdmin is the admin status of the account
      * @param Count is the number of accounts listed in the program.
+     * @author Kurtis, Kian 
      */
     public static void makeProfile(String theName, String theEmail, boolean isAdmin, int Count) {
         try {
