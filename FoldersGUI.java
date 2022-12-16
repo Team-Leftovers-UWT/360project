@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
@@ -8,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class FoldersGUI {
-	Dimension folderButtonSize = new Dimension(5,5);
-	
 	public static void start() {
 		JFrame frame = new JFrame("Select Folder");
 		frame.setVisible(true);
@@ -34,33 +31,39 @@ public class FoldersGUI {
 		
 		JButton back = new JButton("Back");
 		//back.setPreferredSize(new Dimension(20,20));
-		panel.add(back, BorderLayout.NORTH);
+		panel.add(back, BorderLayout.SOUTH);
 		
 		temppanel.add(bathroom); temppanel.add(bedroom); temppanel.add(garage);
 		temppanel.add(kitchen); temppanel.add(livingroom); temppanel.add(other);
 		
 		bathroom.addActionListener(e -> {
-            //insert call to the import/export method/class
+			frame.dispose();
+			Iteration2 theGUI = new Iteration2();
         });
 		
 		bedroom.addActionListener(e -> {
-            //insert call to the import/export method/class
+			frame.dispose();
+			Iteration2 theGUI = new Iteration2();
         });
 		
 		garage.addActionListener(e -> {
-            //insert call to the import/export method/class
+            frame.dispose();
+            Iteration2 theGUI = new Iteration2();
         });
 		
 		kitchen.addActionListener(e -> {
-            //insert call to the import/export method/class
+			frame.dispose();
+			Iteration2 theGUI = new Iteration2();
         });
 		
 		livingroom.addActionListener(e -> {
-            //insert call to the import/export method/class
+			frame.dispose();
+			Iteration2 theGUI = new Iteration2();
         });
 		
 		other.addActionListener(e -> {
-            //insert call to the import/export method/class
+			frame.dispose();
+			Iteration2 theGUI = new Iteration2();
         });
 		
 		back.addActionListener(e -> {
