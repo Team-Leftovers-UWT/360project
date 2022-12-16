@@ -1,8 +1,3 @@
-/**
- * @author kpc2000
- *
- */
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,12 +5,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO; // Might not need.
 
 public class Profile {
-    private String username;
-    private String email;
-    private boolean admin;
-    private int count;
+    private final String username;
+    private final String email;
+    private final boolean admin;
+    private final int count;
     private Project[] projects;
-    private File profilePic = null;
+    private final File profilePic = null;
 
     /**
      * Parameterized Constructor for the Profile Class.
