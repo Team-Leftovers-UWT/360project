@@ -1,6 +1,9 @@
 /*
- *
- * @Author Masse
+ * This class implements the 3rd user story
+ * and is called by FoldersGUI.
+ * Creates a frame which allows users to import
+ * export and delete files.
+ * @Author Masse, Deep
  */
 import java.awt.*;
 import javax.swing.*;
@@ -18,7 +21,11 @@ public class Iteration2 extends JFrame{
     private final JButton deleteButton;
     private final JButton backButton;
 
-
+    /** 
+     * creates the frame with all the buttons
+     *
+     * @author Messe, Deep
+     */
     public Iteration2() {
         super("Import Export");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,7 +60,11 @@ public class Iteration2 extends JFrame{
        
         setVisible(true);
     }
-
+    
+    /** 
+     * This class performs the action for back button
+     * @author Deep Singh
+     */
     private class backActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             dispose();
@@ -62,7 +73,10 @@ public class Iteration2 extends JFrame{
         }
     }
 
-    // Action listener for uploading a file
+    /** 
+     * Action listener for uploading a file
+     * @author Messe
+     */
     private class importActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
@@ -76,8 +90,10 @@ public class Iteration2 extends JFrame{
     }
 
 
-
-    // Action listener for deleting a file
+    /** 
+     * Action listener for deleting a file
+     * @author Messe
+     */
     private class DeleteActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int selectedIndex = fileList.getSelectedIndex();
@@ -86,7 +102,12 @@ public class Iteration2 extends JFrame{
             }
         }
     }
-    //Action listener for exporting a file
+    
+    
+    /** 
+     * Action listener for exporting a file
+     * @author Messe
+     */
     private class exportActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int selectedIndex = fileList.getSelectedIndex();
