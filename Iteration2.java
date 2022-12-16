@@ -16,10 +16,10 @@ public class Iteration2 extends JFrame{
 
     private final JList<File> fileList;
     private final DefaultListModel<File> listModel;
-    private final JButton importButton;
-    private final JButton exportButton;
-    private final JButton deleteButton;
-    private final JButton backButton;
+    private  JButton importButton;
+    private  JButton exportButton;
+    private  JButton deleteButton;
+    private  JButton backButton;
 
     /** 
      * creates the frame with all the buttons
@@ -122,6 +122,39 @@ public class Iteration2 extends JFrame{
                 }
             }
         }
+    }
+     /* setup the buttons
+     * @Author Masse
+     */
+    public void setImportButton(JButton importButton){
+        this.importButton = importButton;
+    }
+    
+    public void setExportButton(JButton exportButton){
+        this.exportButton = exportButton;
+    }
+
+    public void setDeleteButton(JButton deleteButton){
+        this.deleteButton = deleteButton;
+    }
+  
+    public void setBackButton(JButton backButton){
+        this.backButton = backButton;
+    }
+
+    public JButton getImportButton() {
+        return importButton;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
+    public JButton getBackButton() {
+        return backButton;
     }
 
 
