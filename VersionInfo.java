@@ -1,4 +1,9 @@
-
+/** 
+ * This class hold the info displayed on the about page
+ * and is called by the AppGUI class.
+ *
+ * @author Deep Singh
+ */
 public class VersionInfo {
 	private final static String D1 = "Deep Singh";
 	private final static String D2 = "Ho Jun Choi";
