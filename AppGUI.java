@@ -1,40 +1,29 @@
-// package Iteration2;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
-
 
 public class AppGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(550, 350);
     private JPanel panel;
     private JFrame frame;
-
     private JButton aboutButton;
     private JButton profileButton;
     private JButton addProfile;
-    
-    private JButton exportButton;
-    private JButton importButton;
-    private JButton deleteButton;
-    private JList<File> fileList;
-    private DefaultListModel<File> listModel;
-    
-    private String filePath = System.getProperty("user.home") + "\\Documents\\LeftOverApp";
-    private File file = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp");
-    private int userCount = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").list().length;
     private File[] tryNames = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").listFiles();
-    private final JFileChooser fileChooser = new JFileChooser();
+    private int userCount = tryNames.length;
 
+    /**
+     * Parameterless Constructor
+     */
     public AppGUI() {
         start();
     }
 
+    /**
+     * Start Method for the AppGUI
+     */
     private void start() {
         frame = new JFrame("Leftovers App");
         frame.setVisible(true);
@@ -42,19 +31,23 @@ public class AppGUI extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         profilePanel();
-       
 
     }
 
+    /**
+     * Displays the About Button, Profiles from Documents Folder, and Create Profile Button.
+     */
     private void profilePanel() {
         panel = new JPanel();
         panel.setSize(FRAME_SIZE);
 
         JPanel tempPanel = new JPanel();
+        String[] theNames = pullNames();
 
-        for (int i = 1; i < userCount + 1; i++) {
-            profileButton = new JButton(tryNames[i].getName());
+        for (int i = 0; i < theNames.length; i++) {
+            profileButton = new JButton(theNames[i]);
             tempPanel.add(profileButton);
+            profileEvent();
         }
 
         addProfile = new JButton("Create Profile");
@@ -67,11 +60,14 @@ public class AppGUI extends JFrame {
         tempPanel.add(addProfile, BorderLayout.NORTH);
         panel.add(tempPanel, BorderLayout.CENTER);
         frame.add(panel, BorderLayout.CENTER);
-        //profileEvent();
+
         addProfileEvent();
         addAboutEvent();
     }
 
+    /**
+     * Displays the "About Us" Panel. Includes Developer Names, Version Number, and GitHub URL.
+     */
     private void aboutPanel() {
         JFrame aboutFrame = new JFrame("About the Leftovers App"); // Creates a New Window for About Info.
         aboutFrame.setVisible(true);
@@ -107,102 +103,20 @@ public class AppGUI extends JFrame {
         aboutFrame.add(panel, BorderLayout.CENTER);
 
     }
-    // add utilities method to shorten this method?
-    // change needed
-    private void mainPanel() {
-        panel = new JPanel();
-        panel.setSize(FRAME_SIZE);
-        panel.setVisible(true);
-        panel.setLayout(null);
-        frame.setContentPane(panel);
 
-        Path userPath = Paths.get(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users");
-        Path testPath = userPath.getName(0);
-        System.out.println(testPath);
-
-        try {
-            Scanner profileDetails = new Scanner(new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        importButton = new JButton("Import");
-        importButton.setBounds(350, 250,  75, 30);
-        importButton.setFocusable(false);
-        exportButton = new JButton("Export");
-        exportButton.setBounds(450, 250,  75, 30);
-        exportButton.setFocusable(false);
-
-        panel.add(importButton);
-        panel.add(exportButton);
-
-        addImportEvent();
-        addExportEvent();
-    }
-
+    /**
+     * Button ActionListener for the About Page
+     */
     private void addAboutEvent() {
         aboutButton.addActionListener(e -> {
             System.out.println("About button clicked.");
             aboutPanel();
         });
     }
-    
-    /* 
-     * creates new panel within the frame 
-     * provides the option for user to import/export/delete files
-     *
-     *
-     *
-     * or we can only keep the button ActionListener
-     *
-     * not added to the main frame, need a button to let the user enter this options
-     */  
-    private void utilities(){
-        frame = new JFrame("Utilities");
-        
-        listModel = new DefaultListModel<>();
-        fileList = new JList<>();
-        fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        importButton = new JButton("Import");
-        exportButton = new JButton("Export");
-        deleteButton = new JButton("Delete");
-        
-        importButton.addActionListener(e -> {
-            System.out.println("Import button clicked.");
-            fileChooser.setMultiSelectionEnabled(JFileChooser.FILES_ONLY);
-            int returnValue = fileChooser.showOpenDialog(frame);//if frame doesnt work/ switch to null or this.
-            if(returnValue == fileChooser.APPROVE_OPTION){
-               File selectedFiles = fileChooser.getSelectedFiles();
-                listModel.addElement(returnValue);   
-            }                               
-       });
-        exportButton.addActionListener(e -> {
-            int selectedIndex = fileList.getSelectedIndex();
-            if(selectedIndex != -1){
-                File SelectFile = listModel.get(selectedIndex);
-                int result = fileChooser.showSaveDialog(frame);//if frame doesnt work/ switch to null or this.
-                if(result == fileChooser.APPROVE_OPTION){
-                    File saveFile = fileChooser.getSelectedFile();
-                }
-            }
-        });
-      deleteButton.addActionListener(e -> {
-          int seleIndex = fileList.getSelectedIndex();
-          if(seleIndex != -1){
-            listModel.remove(seleIndex);
-          }
-      });
-      frame.setLayout(new BorderLayout());
-      JPanel buttonPanel = new JPanel();
-         buttonPanel.add(importButton);
-         buttonPanel.add(exportButton);
-         buttonPanel.add(deleteButton);
-         frame.add(buttonPanel, BorderLayout.SOUTH);
-         frame.add( new JScrollPane(fileList), BorderLayout.CENTER);
 
-    }
-    
+    /**
+     * Button ActionListener for the Create Profile Page
+     */
     private void addProfileEvent() {
         addProfile.addActionListener(event -> {
             System.out.println("Create Profile button clicked.");
@@ -212,7 +126,8 @@ public class AppGUI extends JFrame {
 
     /**
      * createProfilePanel opens up a prompt asking the user for a
-     *                      username, email and determine its admin status
+     * username, email and determine its admin status. If there are already 4 users,
+     * prevent the user from creating more.
      */
     private void createProfilePanel() {
         JFrame createFrame = new JFrame("Create a Profile"); // Creates a New Window for About Info.
@@ -248,36 +163,70 @@ public class AppGUI extends JFrame {
         createFrame.add(isAdmin);
         createFrame.add(submit);
 
-        submit.addActionListener(event -> {
-            userCount++;
-            String username = setUsername.getText();
-            String email = setEmail.getText();
-            boolean adminStatus = false;
-            if (isAdmin.isSelected()) {
-                adminStatus = true;
-            }
-            Profile User = new Profile(username, email, adminStatus, userCount);
-            Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
-            createFrame.dispose();
-            frame.dispose();
-            
-            // Updates userCount
-            userCount++;
-            
-            start();
+        if(userCount < 4) {
+	        submit.addActionListener(event -> {
+	            userCount++;
+	            String username = setUsername.getText();
+	            String email = setEmail.getText();
+	            boolean adminStatus = false;
+	            if (isAdmin.isSelected()) {
+	                adminStatus = true;
+	            }
+	            Profile User = new Profile(username, email, adminStatus, userCount);
+	            Profile.makeProfile(User.getUserName(), User.getEmail(), User.isAdmin(),User.getCount());
+	            createFrame.dispose();
+	            frame.dispose();
+	         
+	            // Updates userCount
+	            userCount++;
+                tryNames = new File(System.getProperty("user.home") + "\\Documents\\LeftOverApp\\Users").listFiles();
+
+	            start();
+	        });
+        }
+        else {
+        	submit.addActionListener(event -> {
+        		JFrame errorFrame = new JFrame("ERROR");
+        		errorFrame.setVisible(true);
+        		errorFrame.setSize(400,100);
+        		errorFrame.setLocationRelativeTo(null);
+        		
+        		errorFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+                JLabel errorMessage = new JLabel();
+                errorMessage.setLayout(new BorderLayout(2,1));
+                errorMessage.setText("There are already 4 users.");
+
+                errorFrame.add(errorMessage, BorderLayout.CENTER);
+
+
+        	});
+        }
+    }
+
+    /**
+     * Button ActionListener to open the Project Categories (FoldersGUI).
+     */
+    private void profileEvent() {
+        profileButton.addActionListener(e -> {
+        	frame.dispose();
+            FoldersGUI.start();
         });
     }
 
-    private void profileEvent() {
-        profileButton.addActionListener(e -> {
-            //mainPanel();
-        });
+    private String[] pullNames() {
+
+        String[] output = new String[tryNames.length];
+        for(int i = 0; i < tryNames.length; i++) {
+            output[i] = tryNames[i].getName();
+        }
+
+        return output;
     }
 
     /**
      * Main driver class which starts the program.
      * It also creates the directory that the program will use to store data.
-     * @param theArgs
      */
     public static void main(String[] theArgs) {
         try {
