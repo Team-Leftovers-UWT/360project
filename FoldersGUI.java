@@ -1,3 +1,10 @@
+/**
+ * This class creates the frame for the 2nd user story 
+ * which categorizes the folders.
+ * This class is called by AppGUI
+ *
+ * @author Deep Singh
+ */
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
@@ -7,6 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class FoldersGUI {
+	/** 
+	 * creates the frame and initializes all buttons used
+	 * @author Deep
+	 */
 	public static void start() {
 		JFrame frame = new JFrame("Select Folder");
 		frame.setVisible(true);
